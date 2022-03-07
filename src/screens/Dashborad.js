@@ -1,19 +1,28 @@
-import React from 'react'
-import {Box, Heading, Center, NativeBaseProvider} from 'native-base'
+import {Box, Center, Heading, NativeBaseProvider} from 'native-base'
+import React, {useEffect} from 'react'
+import {useSelector} from 'react-redux'
 
-function Dashborad() {
+function Dashborad({navigation}) {
+  const auth = useSelector(state => state.auth)
+
+  useEffect(() => {
+    if (!auth.authenticate) {
+      navigation.replace('SignInScreen')
+    }
+  }, [])
+
   return (
     <NativeBaseProvider>
       <Center flex={1}>
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Heading
             size="lg"
-            fontWeight="600"
+            fontWeight="400"
             color="coolGray.800"
             _dark={{
               color: 'warmGray.50',
             }}>
-            Welcome Home
+            Welcome {auth.user.userEmail}
           </Heading>
         </Box>
       </Center>
