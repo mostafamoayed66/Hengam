@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {Provider} from 'react-redux'
-import {Store} from './Store'
+import Store from './Store'
 import Dashborad from './screens/Dashborad'
 import SignInScreen from './screens/SignInScreen'
 
