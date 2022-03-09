@@ -1,70 +1,60 @@
 import {
   Box,
-  Text,
-  Heading,
-  VStack,
-  FormControl,
-  Input,
   Button,
-  HStack,
   Center,
+  FormControl,
+  Heading,
+  HStack,
+  Input,
   NativeBaseProvider,
+  Text,
+  VStack,
 } from 'native-base'
-import React, {useState} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React, {useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {login} from '../actions/auth.actions'
+import {HeadLg, HeadXs} from '../utils/Heads'
 
 function SignInScreen({navigation}) {
   const dispatch = useDispatch()
   const auth = useSelector(state => state.auth)
+
+  useEffect(() => {
+    if (auth.authenticate) {
+      navigation.replace('Dashborad')
+    }
+  }, [auth.authenticate])
+
   const [show, setShow] = useState(false)
-  const [userEmail, setUserEmail] = useState('')
-  const [userPassword, setUserPassword] = useState('')
+  const [email, setUserEmail] = useState('')
+  const [password, setUserPassword] = useState('')
 
   const userLogin = () => {
     const user = {
-      userEmail,
-      userPassword,
+      email,
+      password,
     }
 
-    dispatch(login(user))
-  }
-
-  if (auth.authenticate) {
-    // console.log(auth.user)
-    navigation.replace('Dashborad')
+    if (password.length > 3) {
+      dispatch(login(user))
+    } else {
+      console.log('SignInScreen \n', 'password.length < 3 Wait for 3 second')
+    }
   }
 
   return (
     <NativeBaseProvider>
       <Center w="100%" flex={1}>
         <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Heading
-            size="lg"
-            fontWeight="600"
-            color="coolGray.800"
-            _dark={{
-              color: 'warmGray.50',
-            }}>
-            Welcome
-          </Heading>
-          <Heading
-            mt="1"
-            _dark={{
-              color: 'warmGray.200',
-            }}
-            color="coolGray.600"
-            fontWeight="medium"
-            size="xs">
-            Sign in to continue!
-          </Heading>
+          <HeadLg title="Welcome" />
+          <HeadXs title="Sign in to continue!" />
 
           <VStack space={3} mt="5">
             <FormControl>
               <FormControl.Label>Email ID</FormControl.Label>
               <Input
                 placeholder="Email"
-                onChangeText={email => setUserEmail(email)}
+                onChangeText={userEmail => setUserEmail(userEmail)}
               />
             </FormControl>
             <FormControl>
@@ -82,7 +72,7 @@ function SignInScreen({navigation}) {
                   </Button>
                 }
                 placeholder="Password"
-                onChangeText={password => setUserPassword(password)}
+                onChangeText={userPassword => setUserPassword(userPassword)}
               />
               {/* <Link alignSelf="flex-end" mt="1"> Forget Password? </Link> */}
             </FormControl>
