@@ -1,6 +1,6 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {api} from '../UrlConfig'
+import {api} from '../urlConfig'
 import store from '../Store'
 import {authConstants} from '../actions/constants'
 
@@ -13,9 +13,9 @@ const axiosIntance = axios.create({
 
 axiosIntance.interceptors.request.use(
   async req => {
-    const auth = await AsyncStorage.getItem('token')
-    if (auth && auth.token) {
-      req.headers.Authorization = `Bearer ${auth.token.access}`
+    const accessKey = await AsyncStorage.getItem('@access_Key')
+    if (accessKey && accessKey.length > 10) {
+      req.headers.Authorization = `Bearer ${accessKey}`
     }
     return req
   },
@@ -28,7 +28,7 @@ axiosIntance.interceptors.response.use(
   },
   error => {
     const status = error.response ? error.response.status : undefined
-    if (status && status === 500 && status === 401 && status === undefined) {
+    if (status && status === 401) {
       store.dispatch({type: authConstants.LOGOUT_SUCCESS})
     }
     return Promise.reject(error)
