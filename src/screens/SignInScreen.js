@@ -3,7 +3,6 @@ import {
   Button,
   Center,
   FormControl,
-  Heading,
   HStack,
   Input,
   NativeBaseProvider,
@@ -21,7 +20,7 @@ function SignInScreen({navigation}) {
 
   useEffect(() => {
     if (auth.authenticate) {
-      navigation.replace('Dashborad')
+      navigation.replace('DashboradScreen')
     }
   }, [auth.authenticate])
 
