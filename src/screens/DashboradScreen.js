@@ -1,36 +1,64 @@
-import {Box, Center, Text, NativeBaseProvider} from 'native-base'
+import {
+  Box,
+  View,
+  Text,
+  NativeBaseProvider,
+  SectionList,
+  Center,
+} from 'native-base'
+import {StyleSheet} from 'react-native'
 import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {getDashboardInfo} from '../actions/main.actions'
+import {Skeletone} from '../utils/Skeletone'
 
-function Section({authentication, dashboardInfo}) {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#eafffe',
+  },
+  taskItem: {
+    padding: 10,
+    marginVertical: 15,
+    fontSize: 16,
+  },
+  taskTitle: {
+    backgroundColor: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 10,
+    elevation: 4,
+    margin: 10,
+    marginBottom: 0,
+    borderRadius: 10,
+  },
+})
+
+function Section({data}) {
   return (
     <NativeBaseProvider>
-      <Center flex={1}>
-        <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Text
-            size="lg"
-            fontWeight="400"
-            color="coolGray.800"
-            _dark={{
-              color: 'warmGray.50',
-            }}>
-            {authentication ? authentication.email : ''}
-            {'\n'}
-            {dashboardInfo !== undefined ? (
-              dashboardInfo.result.map(dataOrderByDate => {
-                return dataOrderByDate.time_entries.map((timeEntrie, index) => (
-                  <Text key={timeEntrie.title.concat(index)}>
-                    {timeEntrie.title}
-                  </Text>
-                ))
-              })
-            ) : (
-              <Text>Loading Data</Text>
-            )}
-          </Text>
+      <View>
+        <Box safeArea px="2" w="100%">
+          {/* {console.log('datails \n', JSON.stringify(data.allData, undefined, 4))} */}
+          {data !== undefined ? (
+            <SectionList
+              sections={data.allData}
+              renderItem={({item}) => (
+                <Text style={styles.taskItem}>{item.title}</Text>
+              )}
+              renderSectionHeader={({section}) => (
+                <Text style={styles.taskTitle}>{section.date}</Text>
+              )}
+              keyExtractor={item => item.id}
+            />
+          ) : (
+            <Center>
+              <Skeletone />
+              <Skeletone />
+            </Center>
+          )}
         </Box>
-      </Center>
+      </View>
     </NativeBaseProvider>
   )
 }
@@ -50,7 +78,7 @@ function DashboradScreen() {
     }
   }, [auth, dispatch])
 
-  return <Section authentication={auth} dashboardInfo={main} />
+  return <Section data={main} />
 }
 
 export default DashboradScreen

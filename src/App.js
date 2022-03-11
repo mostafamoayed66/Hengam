@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Provider} from 'react-redux'
 import DashboradScreen from './screens/DashboradScreen'
-import LoadingScreen from './screens/LoadingScreen'
+import MainScreen from './screens/MainScreen'
 import SignInScreen from './screens/SignInScreen'
 import Store from './Store'
 
@@ -13,13 +13,17 @@ function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="LoadingScreen">
+        <Stack.Navigator initialRouteName="MainScreen">
           <Stack.Screen
-            name="LoadingScreen"
-            component={LoadingScreen}
+            name="MainScreen"
+            component={MainScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="SignInScreen" component={SignInScreen} />
+          <Stack.Screen
+            name="SignInScreen"
+            component={SignInScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="DashboradScreen" component={DashboradScreen} />
         </Stack.Navigator>
       </NavigationContainer>
