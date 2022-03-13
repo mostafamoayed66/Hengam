@@ -13,7 +13,7 @@ import {
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {login} from '../actions/auth.actions'
-import {HeadLg, HeadXs} from '../utils/Heads'
+import {HeadLg, HeadXs} from '../components/heads'
 
 function SignInScreen({navigation}) {
   const dispatch = useDispatch()

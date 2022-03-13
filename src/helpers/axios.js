@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {api} from '../urlConfig'
-import store from '../Store'
+import store from '../store'
 import {authConstants} from '../actions/constants'
 
 const axiosIntance = axios.create({

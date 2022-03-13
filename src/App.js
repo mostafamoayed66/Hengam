@@ -2,10 +2,10 @@ import React from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Provider} from 'react-redux'
-import DashboradScreen from './screens/DashboradScreen'
-import MainScreen from './screens/MainScreen'
-import SignInScreen from './screens/SignInScreen'
-import Store from './Store'
+import LoadingScreen from './screens/loadingScreen'
+import DashboradScreen from './screens/dashboard/dashboradScreen'
+import SignInScreen from './screens/signInScreen'
+import Store from './store'
 
 const Stack = createStackNavigator()
 
@@ -13,10 +13,10 @@ function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="MainScreen">
+        <Stack.Navigator initialRouteName="LoadingScreen">
           <Stack.Screen
-            name="MainScreen"
-            component={MainScreen}
+            name="LoadingScreen"
+            component={LoadingScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
