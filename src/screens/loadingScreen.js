@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react'
 import {Spinner, HStack, Heading, Center, NativeBaseProvider} from 'native-base'
 import {useSelector} from 'react-redux'
+// import SwipeList from '../components/SwipeList'
 
-function MainScreen({navigation}) {
+function LoadingScreen({navigation}) {
   const auth = useSelector(state => state.auth)
 
   useEffect(() => {
@@ -27,4 +28,4 @@ function MainScreen({navigation}) {
   )
 }
 
-export default MainScreen
+export default LoadingScreen
