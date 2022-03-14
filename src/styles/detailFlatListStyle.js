@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   RowItem: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#e5e5e5',

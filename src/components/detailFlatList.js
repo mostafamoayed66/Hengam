@@ -35,7 +35,7 @@ function DetailPresenceTransition({isOpen, timeDetails}) {
   )
 }
 
-export function DetailFlatList({items}) {
+export function DetailFlatList({items, onOpenSheet}) {
   const [isOpen, setIsOpen] = React.useState(false)
   return (
     <Box>
@@ -58,8 +58,12 @@ export function DetailFlatList({items}) {
               <Box style={styles.rightRow}>
                 <Pressable
                   borderColor={isOpen ? 'danger.600' : 'success.600'}
-                  onPress={() => setIsOpen(!isOpen)}>
-                  <Ionicon name="ellipsis-vertical" color="#42474d" size={20} />
+                  onPress={onOpenSheet}>
+                  <Ionicon
+                    name="ellipsis-vertical-circle-outline"
+                    color="#525252"
+                    size={28}
+                  />
                 </Pressable>
                 {/* {item.total_tracked_time} */}
               </Box>

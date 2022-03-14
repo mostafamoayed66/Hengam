@@ -19,7 +19,7 @@ export function Skeletone() {
         p="4">
         <Skeleton flex="1" h="150" rounded="md" startColor="coolGray.100" />
         <VStack flex="3" space="4">
-          <Skeleton startColor="amber.300" />
+          <Skeleton startColor="darkBlue.300" />
           <Skeleton.Text />
           <HStack space="2" alignItems="center">
             <Skeleton size="5" rounded="full" />

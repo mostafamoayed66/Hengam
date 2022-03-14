@@ -21,7 +21,7 @@ function SignInScreen({navigation}) {
 
   useEffect(() => {
     if (auth.authenticate) {
-      navigation.replace('DashboradScreen')
+      navigation.replace('Dashborad')
     }
   }, [auth.authenticate])
 
