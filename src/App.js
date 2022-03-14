@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import {Provider} from 'react-redux'
 import Loading from './screens/loading'
 import Dashborad from './screens/dashboard/dashborad'
-import SignIn from './screens/signIn'
+import SignIn from './screens/signIn/signIn'
 import Store from './store'
 
 const Stack = createStackNavigator()
