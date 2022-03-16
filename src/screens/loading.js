@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react'
 import {Spinner, HStack, Heading, Center, NativeBaseProvider} from 'native-base'
 import {useSelector} from 'react-redux'
-// import SwipeList from '../components/swipeList'
-// <SwipeList />
 
 function LoadingScreen({navigation}) {
   const auth = useSelector(state => state.auth)

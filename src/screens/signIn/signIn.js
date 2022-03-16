@@ -7,27 +7,33 @@ import {
   Input,
   NativeBaseProvider,
   Text,
+  Heading,
   VStack,
   Image,
 } from 'native-base'
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
+import {useTheme} from '@react-navigation/native'
 import {login} from '../../actions/auth.actions'
 import {HeadLg, HeadXs} from '../../components/heads'
+import getStyleSheet from '../../styles/globalStyle'
 
 function SignInScreen({navigation}) {
   const dispatch = useDispatch()
   const auth = useSelector(state => state.auth)
+
+  const {dark} = useTheme()
+  const theme = getStyleSheet(dark)
+
+  const [show, setShow] = useState(false)
+  const [formData, setFormData] = React.useState({})
+  const [errors, setErrors] = React.useState({})
 
   useEffect(() => {
     if (auth.authenticate) {
       navigation.replace('Dashborad')
     }
   }, [auth.authenticate])
-
-  const [show, setShow] = useState(false)
-  const [formData, setFormData] = React.useState({})
-  const [errors, setErrors] = React.useState({})
 
   const validate = () => {
     if (formData.password === undefined) {
@@ -65,9 +71,14 @@ function SignInScreen({navigation}) {
           <HeadXs title="Sign in to continue!" />
           <VStack space={3} mt="5">
             <FormControl isInvalid={'emailRequired' in errors}>
-              <FormControl.Label>Email</FormControl.Label>
+              <FormControl.Label>
+                <Heading style={theme.label}>Email</Heading>
+              </FormControl.Label>
+
               <Input
                 placeholder="Email"
+                px="4"
+                color={dark === true ? '#fff' : '#000'}
                 onChangeText={value => setFormData({...formData, email: value})}
               />
 
@@ -79,9 +90,18 @@ function SignInScreen({navigation}) {
             </FormControl>
 
             <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
+              <FormControl.Label>
+                <Heading style={theme.label}>Password</Heading>
+              </FormControl.Label>
+
               <Input
                 type={show ? 'text' : 'password'}
+                placeholder="Password"
+                px="4"
+                color={dark === true ? '#fff' : '#000'}
+                onChangeText={value =>
+                  setFormData({...formData, password: value})
+                }
                 InputRightElement={
                   <Button
                     size="xs"
@@ -92,24 +112,13 @@ function SignInScreen({navigation}) {
                     {show ? 'Hide' : 'Show'}
                   </Button>
                 }
-                placeholder="Password"
-                onChangeText={value =>
-                  setFormData({...formData, password: value})
-                }
               />
             </FormControl>
             <Button mt="6" colorScheme="indigo" onPress={onSubmit}>
               Sign in
             </Button>
             <HStack mt="6" justifyContent="center">
-              <Text
-                fontSize="sm"
-                color="coolGray.600"
-                _dark={{
-                  color: 'warmGray.200',
-                }}>
-                Welcome to Hengom login.{' '}
-              </Text>
+              <Text style={theme.text}>Welcome to Hengom login. </Text>
             </HStack>
           </VStack>
         </Box>
