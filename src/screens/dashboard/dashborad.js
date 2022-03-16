@@ -5,23 +5,49 @@ import {
   FlatList,
   Heading,
   NativeBaseProvider,
-  Avatar,
-  HStack,
-  VStack,
-  Spacer,
   Text,
   View,
   Actionsheet,
   useDisclose,
-  Button,
+  HStack,
+  Pressable,
+  VStack,
 } from 'native-base'
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
-import {DetailFlatList} from '../../components/detailFlatList'
+import dayjs from 'dayjs'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import {TextInput} from 'react-native'
+import TimeItem from './timeItem'
 import {Skeletone} from '../../components/skeletone'
-import {dashboardRequest} from './dashboard-request'
-import {styles} from './dashboard-style'
-// import formatDate from '../utils/formatDate'
+import {dashboardRequest} from './request'
+import {styles} from './style'
+import {durationFormat} from '../../utils/durationFormat'
+
+function ItemHeader({date, total}) {
+  return (
+    <HStack style={styles.header}>
+      <Center>
+        <Heading size="xs">
+          <Text>
+            {dayjs(date).calendar(null, {
+              sameDay: '[Today]',
+              nextDay: '[Tomorrow]',
+              nextWeek: 'dddd',
+              lastDay: '[Yesterday]',
+              lastWeek: 'dddd',
+              sameElse: 'dddd',
+            })}
+          </Text>
+          <Text>, {dayjs(date).format('MMM DD')}</Text>
+        </Heading>
+      </Center>
+      <Center>
+        <Heading size="xs">{durationFormat(total)}</Heading>
+      </Center>
+    </HStack>
+  )
+}
 
 function DashboradScreen() {
   const {isOpen, onOpen, onClose} = useDisclose()
@@ -46,18 +72,32 @@ function DashboradScreen() {
       {data !== undefined && data.length !== 0 ? (
         <View style={styles.page}>
           <Center>
-            <Actionsheet isOpen={isOpen} onClose={onClose} disableOverlay>
+            <Actionsheet isOpen={isOpen} onClose={onClose} size="full">
               <Actionsheet.Content>
-                <Box w="100%" h={60} px={4} justifyContent="center">
-                  <Text fontSize="16" color="gray.500">
-                    Albums
-                  </Text>
-                </Box>
-                <Actionsheet.Item>Delete</Actionsheet.Item>
-                <Actionsheet.Item>Share</Actionsheet.Item>
-                <Actionsheet.Item>Play</Actionsheet.Item>
-                <Actionsheet.Item>Favourite</Actionsheet.Item>
-                <Actionsheet.Item>Cancel</Actionsheet.Item>
+                <Actionsheet.Item
+                  startIcon={
+                    <Ionicon name="construct" color="#525252" size={28} />
+                  }>
+                  Edit
+                </Actionsheet.Item>
+                <Actionsheet.Item
+                  startIcon={
+                    <Ionicon name="duplicate" color="#525252" size={28} />
+                  }>
+                  Duplicate
+                </Actionsheet.Item>
+                <Actionsheet.Item
+                  startIcon={
+                    <Ionicon name="trash" color="#525252" size={28} />
+                  }>
+                  Delete
+                </Actionsheet.Item>
+                <Actionsheet.Item
+                  startIcon={
+                    <Ionicon name="close" color="#525252" size={28} />
+                  }>
+                  Cancel
+                </Actionsheet.Item>
               </Actionsheet.Content>
             </Actionsheet>
           </Center>
@@ -67,16 +107,35 @@ function DashboradScreen() {
             data={data.result}
             renderItem={({item}) => (
               <Box>
-                <Box style={styles.Header}>
-                  <Heading size="sm">{item.date}</Heading>
-                  <Heading size="sm">{item.total_tracked_time}</Heading>
+                <Box>
+                  <ItemHeader
+                    date={item.date}
+                    total={dayjs.duration(item.total_tracked_time, 'second')}
+                  />
                 </Box>
                 <Divider />
-                <DetailFlatList items={item} onOpenSheet={onOpen} />
+                <TimeItem times={item.time_entries} onOpenSheet={onOpen} />
               </Box>
             )}
             keyExtractor={item => item.date}
           />
+
+          <Box style={styles.footer}>
+            <HStack>
+              <VStack style={styles.leftFooter}>
+                <TextInput
+                  placeholder="What are you going to do?"
+                  style={styles.inputStyle}
+                  onChangeText={text => console.log(text)}
+                />
+              </VStack>
+              <Pressable
+                style={styles.rightFooter}
+                onPress={() => console.log('footer click')}>
+                <Ionicon name="play" color="#fff" size={28} />
+              </Pressable>
+            </HStack>
+          </Box>
         </View>
       ) : (
         <Center>

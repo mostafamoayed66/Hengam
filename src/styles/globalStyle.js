@@ -1,41 +1,29 @@
+import {StyleSheet} from 'react-native'
+
 export const Colors = {
   dark: 'black',
   light: 'white',
 }
 
-const baseContainerStyles = {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-const baseBoxStyles = {
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: 2,
-  height: 150,
-  width: 150,
-}
-
 const lightStyleSheet = StyleSheet.create({
-  container: {
-    ...baseContainerStyles,
-    backgroundColor: Colors.light,
+  text: {
+    color: Colors.dark,
   },
-  box: {
-    ...baseBoxStyles,
-    borderColor: Colors.dark,
+  label: {
+    color: Colors.dark,
+    marginStart: 8,
+    fontSize: 14,
   },
 })
 
 const darkStyleSheet = StyleSheet.create({
-  container: {
-    ...baseContainerStyles,
-    backgroundColor: Colors.dark,
+  text: {
+    color: Colors.light,
   },
-  box: {
-    ...baseBoxStyles,
-    borderColor: Colors.light,
+  label: {
+    color: Colors.light,
+    marginStart: 8,
+    fontSize: 14,
   },
 })
 
