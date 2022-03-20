@@ -1,9 +1,6 @@
 import {StyleSheet} from 'react-native'
 
-export const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
+export const baseStyles = StyleSheet.create({
   header: {
     flex: 1,
     paddingHorizontal: 14,
@@ -11,7 +8,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  RowItem: {
+  rowItem: {
     flex: 1,
     paddingHorizontal: 22,
     paddingVertical: 10,
@@ -21,16 +18,31 @@ export const styles = StyleSheet.create({
   leftRow: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   rightRow: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  PressableItem: {
+  footer: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+  },
+  leftFooter: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  rightFooter: {
+    width: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#c026d3',
+    borderRadius: 70,
+  },
+  pressableItem: {
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 8,
@@ -38,25 +50,41 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#525252',
   },
-  footer: {
-    borderTopWidth: 1,
-    borderColor: '#e5e5e5',
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    backgroundColor: '#f5f5e5',
+})
+
+export const Colors = {
+  dark: 'black',
+  light: 'white',
+  muted300: '#d4d4d4',
+  muted600: '#525252',
+}
+
+const lightStyleSheet = StyleSheet.create({
+  text: {
+    color: Colors.dark,
   },
-  leftFooter: {
-    flex: 1,
-    paddingHorizontal: 10,
+  iconEdit: {
+    color: Colors.muted600,
+    fontSize: 28,
   },
-  rightFooter: {
-    width: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#d946ef',
-    borderRadius: 60,
-  },
-  inputStyle: {
-    fontSize: 16,
+  divider: {
+    color: Colors.muted300,
   },
 })
+
+const darkStyleSheet = StyleSheet.create({
+  text: {
+    color: Colors.light,
+  },
+  iconEdit: {
+    color: Colors.muted300,
+    fontSize: 28,
+  },
+  divider: {
+    color: Colors.muted600,
+  },
+})
+
+export default function getStyleSheet(useDarkTheme) {
+  return useDarkTheme ? darkStyleSheet : lightStyleSheet
+}

@@ -13,39 +13,40 @@ import {
 import dayjs from 'dayjs'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import {durationFormat} from '../../utils/durationFormat'
-import {styles} from './style'
+import getStyleSheet, {baseStyles} from './style'
 
-function TimeItemInner({onOpen, time, title, count, onOpenSheet}) {
+function TimeItemInner({onOpen, time, title, count, onOpenSheet, isDark}) {
+  const theme = getStyleSheet(isDark)
   return (
     <View>
-      <HStack style={styles.RowItem}>
-        <VStack style={styles.leftRow}>
+      <HStack style={baseStyles.rowItem}>
+        <VStack style={baseStyles.leftRow}>
           {count > 1 ? (
-            <Pressable style={styles.PressableItem} onPress={onOpen}>
-              <Text>{count}</Text>
+            <Pressable style={baseStyles.pressableItem} onPress={onOpen}>
+              <Text style={theme.text}>{count}</Text>
             </Pressable>
           ) : null}
-          <Text>{title}</Text>
+          <Text style={theme.text}>{title}</Text>
         </VStack>
-        <VStack style={styles.rightRow}>
+        <VStack style={baseStyles.rightRow}>
           <Pressable onPress={onOpenSheet} px="3">
-            <Ionicon name="play" color="#525252" size={28} />
+            <Ionicon name="play" style={theme.iconEdit} />
           </Pressable>
           <Pressable onPress={onOpenSheet}>
-            <Ionicon name="ellipsis-vertical" color="#525252" size={28} />
+            <Ionicon name="ellipsis-vertical" style={theme.iconEdit} />
           </Pressable>
         </VStack>
       </HStack>
-      <HStack style={styles.RowItem}>
+      <HStack style={baseStyles.rowItem}>
         <VStack>
-          <Text>
+          <Text style={theme.text}>
             {durationFormat(time.duration)} {'  '}
             {dayjs(time.start * 1000).format('HH:mm')} -{' '}
             {dayjs(time.end * 1000).format('HH:mm')}
           </Text>
         </VStack>
         <VStack>
-          <Text>{durationFormat(time.duration)}</Text>
+          <Text style={theme.text}>{durationFormat(time.duration)}</Text>
         </VStack>
       </HStack>
       <Divider />
@@ -53,7 +54,7 @@ function TimeItemInner({onOpen, time, title, count, onOpenSheet}) {
   )
 }
 
-function TimeItem({times, onOpenSheet}) {
+function TimeItem({times, onOpenSheet, isDark}) {
   const [open, setOpen] = useState(false)
   return (
     <Box>
@@ -71,6 +72,7 @@ function TimeItem({times, onOpenSheet}) {
               title={item.title}
               count={item.time_entries.length}
               onOpenSheet={onOpenSheet}
+              isDark={isDark}
             />
             <Box>
               {open && item.time_entries.length > 1 ? (
@@ -101,6 +103,7 @@ function TimeItem({times, onOpenSheet}) {
                           title={item.title}
                           count={1}
                           onOpenSheet={onOpenSheet}
+                          isDark={isDark}
                         />
                       )}
                     />

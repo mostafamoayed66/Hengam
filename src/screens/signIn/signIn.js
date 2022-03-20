@@ -2,21 +2,21 @@ import {
   Box,
   Button,
   Center,
-  FormControl,
   HStack,
   Input,
   NativeBaseProvider,
   Text,
-  Heading,
   VStack,
   Image,
 } from 'native-base'
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTheme} from '@react-navigation/native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import {login} from '../../actions/auth.actions'
-import {HeadLg, HeadXs} from '../../components/heads'
-import getStyleSheet from '../../styles/globalStyle'
+import Head from '../../components/sample-head/head'
+import FormControl from '../../components/sample-formControl/formControl'
+import getStyleSheet from './style'
 
 function SignInScreen({navigation}) {
   const dispatch = useDispatch()
@@ -27,7 +27,14 @@ function SignInScreen({navigation}) {
 
   const [show, setShow] = useState(false)
   const [formData, setFormData] = React.useState({})
-  const [errors, setErrors] = React.useState({})
+  const [errors, setErrors] = React.useState({
+    emailRequired: undefined,
+    passwordRequired: undefined,
+  })
+  const [status, setStatus] = React.useState({
+    statusEmail: false,
+    statusPassword: false,
+  })
 
   useEffect(() => {
     if (auth.authenticate) {
@@ -36,23 +43,36 @@ function SignInScreen({navigation}) {
   }, [auth.authenticate])
 
   const validate = () => {
-    if (formData.password === undefined) {
-      setErrors({...errors, passwordReuired: 'password is required'})
-      return false
-    }
-    if (formData.email === undefined) {
-      setErrors({...errors, emailRequired: 'email is required'})
-      return false
-    }
-    if (formData.password.length < 3) {
-      setErrors({...errors, passwordShort: 'password is too short'})
-      return false
+    if (!status.statusEmail && !status.statusPassword) {
+      setErrors({
+        emailRequired: 'Email is required',
+        passwordRequired: 'Password is required',
+      })
+    } else {
+      if (!status.statusEmail) {
+        setErrors({
+          emailRequired: 'Email is required',
+        })
+      }
+      if (!status.statusPassword) {
+        setErrors({
+          passwordRequired: 'Password is required',
+        })
+      }
     }
 
-    return true
+    return status.statusPassword && status.statusEmail
   }
 
   const onSubmit = () => {
+    formData.email && formData.email.length > 1
+      ? (status.statusEmail = true)
+      : (status.statusEmail = false)
+
+    formData.password && formData.password.length > 1
+      ? (status.statusPassword = true)
+      : (status.statusPassword = false)
+
     validate() ? dispatch(login(formData)) : console.log('Validation Failed')
   }
 
@@ -67,33 +87,37 @@ function SignInScreen({navigation}) {
           size={112}
         />
         <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <HeadLg title="Welcome" />
-          <HeadXs title="Sign in to continue!" />
+          <Head
+            title="Welcome"
+            style={theme.topLabel}
+            fontWeight="700"
+            size="lg"
+          />
+          <Head
+            title="Sign in to continue!"
+            style={theme.topLabel}
+            fontWeight="medium"
+            size="xs"
+            mt="1"
+          />
           <VStack space={3} mt="5">
-            <FormControl isInvalid={'emailRequired' in errors}>
-              <FormControl.Label>
-                <Heading style={theme.label}>Email</Heading>
-              </FormControl.Label>
-
+            <FormControl
+              title="Email"
+              theme={theme}
+              helperText="Email Required."
+              error={errors.emailRequired}>
               <Input
                 placeholder="Email"
                 px="4"
                 color={dark === true ? '#fff' : '#000'}
                 onChangeText={value => setFormData({...formData, email: value})}
               />
-
-              {'emailRequired' in errors ? (
-                <FormControl.ErrorMessage>{errors}</FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText>Email Required.</FormControl.HelperText>
-              )}
             </FormControl>
-
-            <FormControl>
-              <FormControl.Label>
-                <Heading style={theme.label}>Password</Heading>
-              </FormControl.Label>
-
+            <FormControl
+              title="Password"
+              theme={theme}
+              helperText="Password Required."
+              error={errors.passwordRequired}>
               <Input
                 type={show ? 'text' : 'password'}
                 placeholder="Password"
@@ -109,7 +133,11 @@ function SignInScreen({navigation}) {
                     w="1/6"
                     h="full"
                     onPress={() => setShow(!show)}>
-                    {show ? 'Hide' : 'Show'}
+                    {show ? (
+                      <Ionicon name="eye" color="#fafafa" size={24} />
+                    ) : (
+                      <Ionicon name="eye-off" color="#fafafa" size={24} />
+                    )}
                   </Button>
                 }
               />
@@ -118,7 +146,7 @@ function SignInScreen({navigation}) {
               Sign in
             </Button>
             <HStack mt="6" justifyContent="center">
-              <Text style={theme.text}>Welcome to Hengom login. </Text>
+              <Text style={theme.text}>Welcome to Hengom login.</Text>
             </HStack>
           </VStack>
         </Box>

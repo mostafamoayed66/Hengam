@@ -1,12 +1,12 @@
 import React from 'react'
 import {Skeleton, VStack, HStack, Center} from 'native-base'
 
-export function Skeletone() {
+function Skeletone() {
   return (
     <Center w="100%" my="2">
       <HStack
         w="90%"
-        maxW="400"
+        maxW="290"
         borderWidth="1"
         space={8}
         rounded="md"
@@ -16,8 +16,9 @@ export function Skeletone() {
         _light={{
           borderColor: 'coolGray.200',
         }}
-        p="4">
-        <Skeleton flex="1" h="150" rounded="md" startColor="coolGray.100" />
+        mt="10"
+        p="5">
+        <Skeleton flex="1" h="150" rounded="md" startColor="coolGray.200" />
         <VStack flex="3" space="4">
           <Skeleton startColor="darkBlue.300" />
           <Skeleton.Text />
@@ -31,3 +32,5 @@ export function Skeletone() {
     </Center>
   )
 }
+
+export default Skeletone
