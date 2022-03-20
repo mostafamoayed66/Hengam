@@ -1,35 +1,34 @@
+import dayjs from 'dayjs'
 import {
-  Box,
-  Center,
+  Actionsheet,
   Divider,
   FlatList,
   Heading,
+  HStack,
   NativeBaseProvider,
+  useDisclose,
+  VStack,
+  Input,
   Text,
   View,
-  Actionsheet,
-  useDisclose,
-  HStack,
   Pressable,
-  VStack,
 } from 'native-base'
 import React, {useEffect, useState} from 'react'
-import {useSelector} from 'react-redux'
-import dayjs from 'dayjs'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import {TextInput} from 'react-native'
-import TimeItem from './timeItem'
-import {Skeletone} from '../../components/skeletone'
-import {dashboardRequest} from './request'
-import {styles} from './style'
+import {useSelector} from 'react-redux'
+import {useTheme} from '@react-navigation/native'
+import Skeletone from '../../components/sample-skeleton/skeletone'
 import {durationFormat} from '../../utils/durationFormat'
+import dashboardRequest from './request'
+import getStyleSheet, {baseStyles} from './style'
+import TimeItem from './timeItem'
 
-function ItemHeader({date, total}) {
+function ItemHeader({date, total, theme}) {
   return (
-    <HStack style={styles.header}>
-      <Center>
+    <HStack style={baseStyles.header}>
+      <View>
         <Heading size="xs">
-          <Text>
+          <Text style={theme.text}>
             {dayjs(date).calendar(null, {
               sameDay: '[Today]',
               nextDay: '[Tomorrow]',
@@ -39,13 +38,62 @@ function ItemHeader({date, total}) {
               sameElse: 'dddd',
             })}
           </Text>
-          <Text>, {dayjs(date).format('MMM DD')}</Text>
+          <Text style={theme.text}>, {dayjs(date).format('MMM DD')}</Text>
         </Heading>
-      </Center>
-      <Center>
-        <Heading size="xs">{durationFormat(total)}</Heading>
-      </Center>
+      </View>
+      <View>
+        <Heading size="xs" style={theme.text}>
+          {durationFormat(total)}
+        </Heading>
+      </View>
     </HStack>
+  )
+}
+
+function ItemActionsheet({isOpen, onClose}) {
+  return (
+    <View>
+      <Actionsheet isOpen={isOpen} onClose={onClose} size="full">
+        <Actionsheet.Content>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="construct" color="#4243d7" size={20} />}>
+            Edit
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="duplicate" color="#2b5555" size={20} />}>
+            Duplicate
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="trash" color="#c3241f" size={20} />}>
+            Delete
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
+    </View>
+  )
+}
+
+function ItemFooter({isDark}) {
+  return (
+    <View style={baseStyles.footer}>
+      <HStack>
+        <VStack style={baseStyles.leftFooter}>
+          <Input
+            px="5"
+            placeholder="What are you going to do?"
+            fontSize="16"
+            color={isDark ? '#fff' : '#000'}
+            variant="unstyled"
+            onChangeText={text => console.log(text)}
+          />
+        </VStack>
+        <Pressable
+          style={baseStyles.rightFooter}
+          onPress={() => console.log('footer click')}>
+          <Ionicon name="play" color="#fff" size={28} />
+        </Pressable>
+      </HStack>
+    </View>
   )
 }
 
@@ -53,6 +101,9 @@ function DashboradScreen() {
   const {isOpen, onOpen, onClose} = useDisclose()
   const [data, setData] = useState([])
   const auth = useSelector(state => state.auth)
+
+  const {dark} = useTheme()
+  const theme = getStyleSheet(dark)
 
   useEffect(() => {
     if (auth.authenticate) {
@@ -70,78 +121,32 @@ function DashboradScreen() {
   return (
     <NativeBaseProvider>
       {data !== undefined && data.length !== 0 ? (
-        <View style={styles.page}>
-          <Center>
-            <Actionsheet isOpen={isOpen} onClose={onClose} size="full">
-              <Actionsheet.Content>
-                <Actionsheet.Item
-                  startIcon={
-                    <Ionicon name="construct" color="#525252" size={28} />
-                  }>
-                  Edit
-                </Actionsheet.Item>
-                <Actionsheet.Item
-                  startIcon={
-                    <Ionicon name="duplicate" color="#525252" size={28} />
-                  }>
-                  Duplicate
-                </Actionsheet.Item>
-                <Actionsheet.Item
-                  startIcon={
-                    <Ionicon name="trash" color="#525252" size={28} />
-                  }>
-                  Delete
-                </Actionsheet.Item>
-                <Actionsheet.Item
-                  startIcon={
-                    <Ionicon name="close" color="#525252" size={28} />
-                  }>
-                  Cancel
-                </Actionsheet.Item>
-              </Actionsheet.Content>
-            </Actionsheet>
-          </Center>
-
+        <View style={{flex: 1}}>
+          <ItemActionsheet isOpen={isOpen} onClose={onClose} />
           <FlatList
             width="100%"
             data={data.result}
             renderItem={({item}) => (
-              <Box>
-                <Box>
-                  <ItemHeader
-                    date={item.date}
-                    total={dayjs.duration(item.total_tracked_time, 'second')}
-                  />
-                </Box>
+              <View>
+                <ItemHeader
+                  date={item.date}
+                  total={dayjs.duration(item.total_tracked_time, 'second')}
+                  theme={theme}
+                />
                 <Divider />
-                <TimeItem times={item.time_entries} onOpenSheet={onOpen} />
-              </Box>
+                <TimeItem
+                  times={item.time_entries}
+                  onOpenSheet={onOpen}
+                  isDark={dark}
+                />
+              </View>
             )}
             keyExtractor={item => item.date}
           />
-
-          <Box style={styles.footer}>
-            <HStack>
-              <VStack style={styles.leftFooter}>
-                <TextInput
-                  placeholder="What are you going to do?"
-                  style={styles.inputStyle}
-                  onChangeText={text => console.log(text)}
-                />
-              </VStack>
-              <Pressable
-                style={styles.rightFooter}
-                onPress={() => console.log('footer click')}>
-                <Ionicon name="play" color="#fff" size={28} />
-              </Pressable>
-            </HStack>
-          </Box>
+          <ItemFooter isDark={dark} />
         </View>
       ) : (
-        <Center>
-          <Skeletone />
-          <Skeletone />
-        </Center>
+        <Skeletone />
       )}
     </NativeBaseProvider>
   )

@@ -1,16 +1,13 @@
 import React, {useEffect} from 'react'
 import {Spinner, HStack, Heading, Center, NativeBaseProvider} from 'native-base'
-import {useSelector} from 'react-redux'
 
-function LoadingScreen({navigation}) {
-  const auth = useSelector(state => state.auth)
+function SplashScreen({navigation}) {
+  const navigateToSignIn = () => {
+    navigation.replace('SignIn')
+  }
 
   useEffect(() => {
-    if (!auth.authenticate) {
-      navigation.replace('SignIn')
-    } else {
-      navigation.replace('Dashborad')
-    }
+    setTimeout(navigateToSignIn, 1000)
   }, [])
 
   return (
@@ -27,4 +24,4 @@ function LoadingScreen({navigation}) {
   )
 }
 
-export default LoadingScreen
+export default SplashScreen
