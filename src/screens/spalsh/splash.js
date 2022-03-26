@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Spinner, HStack, Heading, Center, NativeBaseProvider} from 'native-base'
+import {Image, Text, Center, NativeBaseProvider} from 'native-base'
 
 function SplashScreen({navigation}) {
   const navigateToSignIn = () => {
@@ -12,13 +12,15 @@ function SplashScreen({navigation}) {
 
   return (
     <NativeBaseProvider>
-      <Center flex={1} px="3">
-        <HStack space={2} justifyContent="center">
-          <Spinner color="cyan.500" />
-          <Heading color="cyan.500" fontSize="md">
-            Loading
-          </Heading>
-        </HStack>
+      <Center flex={1}>
+        <Image
+          source={require('../../assets/png/hengam.png')}
+          alt="Hengam App"
+          size={90}
+        />
+        <Text italic bold pt="3">
+          Hengam App
+        </Text>
       </Center>
     </NativeBaseProvider>
   )

@@ -8,7 +8,6 @@ import {
   FlatList,
   HStack,
   VStack,
-  Divider,
 } from 'native-base'
 import dayjs from 'dayjs'
 import Ionicon from 'react-native-vector-icons/Ionicons'
@@ -29,7 +28,7 @@ function TimeItemInner({onOpen, time, title, count, onOpenSheet, isDark}) {
           <Text style={theme.text}>{title}</Text>
         </VStack>
         <VStack style={baseStyles.rightRow}>
-          <Pressable onPress={onOpenSheet} px="3">
+          <Pressable px="3">
             <Ionicon name="play" style={theme.iconEdit} />
           </Pressable>
           <Pressable onPress={onOpenSheet}>
@@ -49,7 +48,6 @@ function TimeItemInner({onOpen, time, title, count, onOpenSheet, isDark}) {
           <Text style={theme.text}>{durationFormat(time.duration)}</Text>
         </VStack>
       </HStack>
-      <Divider />
     </View>
   )
 }

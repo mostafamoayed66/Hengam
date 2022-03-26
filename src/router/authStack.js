@@ -1,6 +1,6 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack'
-import Splash from '../screens/splash'
+import Splash from '../screens/spalsh/splash'
 import SignIn from '../screens/signIn/signIn'
 
 const Stack = createStackNavigator()

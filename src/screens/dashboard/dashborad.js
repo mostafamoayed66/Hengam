@@ -22,6 +22,7 @@ import {durationFormat} from '../../utils/durationFormat'
 import dashboardRequest from './request'
 import getStyleSheet, {baseStyles} from './style'
 import TimeItem from './timeItem'
+import TimeEditorModal from './timeEditorModal'
 
 function ItemHeader({date, total, theme}) {
   return (
@@ -50,29 +51,6 @@ function ItemHeader({date, total, theme}) {
   )
 }
 
-function ItemActionsheet({isOpen, onClose}) {
-  return (
-    <View>
-      <Actionsheet isOpen={isOpen} onClose={onClose} size="full">
-        <Actionsheet.Content>
-          <Actionsheet.Item
-            startIcon={<Ionicon name="construct" color="#4243d7" size={20} />}>
-            Edit
-          </Actionsheet.Item>
-          <Actionsheet.Item
-            startIcon={<Ionicon name="duplicate" color="#2b5555" size={20} />}>
-            Duplicate
-          </Actionsheet.Item>
-          <Actionsheet.Item
-            startIcon={<Ionicon name="trash" color="#c3241f" size={20} />}>
-            Delete
-          </Actionsheet.Item>
-        </Actionsheet.Content>
-      </Actionsheet>
-    </View>
-  )
-}
-
 function ItemFooter({isDark}) {
   return (
     <View style={baseStyles.footer}>
@@ -97,8 +75,44 @@ function ItemFooter({isDark}) {
   )
 }
 
+function onDeleteFunction(onClose) {
+  onClose(true)
+}
+
+function onDuplicateFunction(onClose) {
+  onClose(true)
+}
+
+function ItemActionsheet({isOpen, onClose, setShowModal, isDark}) {
+  const theme = getStyleSheet(isDark)
+  return (
+    <View>
+      <Actionsheet isOpen={isOpen} onClose={onClose} size="full">
+        <Actionsheet.Content>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="construct" color="#4243d7" size={20} />}
+            onPress={() => setShowModal(true)}>
+            <Text style={theme.text}>Edit</Text>
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="duplicate" color="#2b5555" size={20} />}
+            onPress={() => onDuplicateFunction(onClose)}>
+            <Text style={theme.text}>Duplicate</Text>
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            startIcon={<Ionicon name="trash" color="#c3241f" size={20} />}
+            onPress={() => onDeleteFunction(onClose)}>
+            <Text style={theme.text}>Delete</Text>
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
+    </View>
+  )
+}
+
 function DashboradScreen() {
   const {isOpen, onOpen, onClose} = useDisclose()
+  const [showModal, setShowModal] = useState(false)
   const [data, setData] = useState([])
   const auth = useSelector(state => state.auth)
 
@@ -122,7 +136,17 @@ function DashboradScreen() {
     <NativeBaseProvider>
       {data !== undefined && data.length !== 0 ? (
         <View style={{flex: 1}}>
-          <ItemActionsheet isOpen={isOpen} onClose={onClose} />
+          <TimeEditorModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            onCloseSheet={onClose}
+          />
+          <ItemActionsheet
+            isOpen={isOpen}
+            onClose={onClose}
+            setShowModal={setShowModal}
+            isDark={dark}
+          />
           <FlatList
             width="100%"
             data={data.result}
